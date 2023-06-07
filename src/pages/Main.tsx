@@ -1,16 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Search from "@/components/Search/Search";
 import Header from "@/components/Header/Header";
 import Modal from "@/components/Modal/Modal";
-import { ImagesContext } from "@/features/images/states/ImagesProvider";
 import { IImage } from "@/features/images/interfaces/IImage";
-import { IImageContext } from "@/features/images/interfaces/IImageContext";
-import {
-  IMaxTags,
-  ITagsAmount,
-} from "@/features/images/interfaces/ITagsAmount";
+import { useImageRecommendation } from "@/features/images/services/useImageRecommendation";
 
 function Main() {
+  const { handleReccomendations } = useImageRecommendation();
+
   const [initPhotos] = useState<IImage[]>([
     {
       id: 1,
@@ -88,7 +85,9 @@ function Main() {
       tags: ["wolfs", "wildlife", "test"],
     },
   ]);
+
   const renders = useRef(0);
+
   const [photos, setPhotos] = useState<IImage[]>([
     {
       id: 1,
@@ -167,7 +166,6 @@ function Main() {
     },
   ]);
 
-  const { setRecommendedTags } = useContext(ImagesContext) as IImageContext;
   useEffect(() => {
     renders.current += 1;
   });
@@ -181,7 +179,7 @@ function Main() {
   const [viewedTags, setViewedTags] = useState<string[]>([]);
 
   useEffect(() => {
-    handleRecs();
+    handleReccomendations(viewedTags);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedTags]);
 
@@ -200,34 +198,6 @@ function Main() {
 
     document.body.classList.remove("modal-open");
   };
-
-  function handleRecs() {
-    const tagsAmount: ITagsAmount = {};
-    const maxTags: IMaxTags = {};
-
-    viewedTags.forEach((tag: string) => {
-      if (tagsAmount[tag]) {
-        tagsAmount[tag] += 1;
-        return;
-      }
-      tagsAmount[tag] = 1;
-    });
-
-    Object.entries(tagsAmount).forEach((tagArrValues) => {
-      if (Object.keys(maxTags).length < 3) {
-        maxTags[tagArrValues[0]] = tagArrValues[1];
-        return;
-      }
-
-      Object.entries(maxTags).forEach((maxTagArrValues) => {
-        if (maxTagArrValues[1] < tagArrValues[1]) {
-          delete maxTags[maxTagArrValues[0]];
-          maxTags[tagArrValues[0]] = tagArrValues[1];
-        }
-      });
-    });
-    setRecommendedTags(maxTags);
-  }
 
   function handleImageClick(photo: IImage) {
     setViewedTags((prevTags) => [...prevTags, ...photo.tags]);

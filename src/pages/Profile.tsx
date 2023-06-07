@@ -1,15 +1,22 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header/Header";
 import CategoryContent from "@/features/images/components/CategoryContent/CategoryTab";
 import CategoryTab from "@/features/images/components/CategoryTab/CategoryTab";
-import { ImagesContext } from "@/features/images/states/ImagesProvider";
-import { IImageContext } from "@/features/images/interfaces/IImageContext";
-import { IInitCategoriesPhotos } from "@/features/images/interfaces/IInitCategoriesPhotos";
+import { useImageRecommendation } from "@/features/images/services/useImageRecommendation";
+import { IImage } from "@/features/images/interfaces/IImage";
 
 function Profile() {
-  const { recommendedTags } = useContext(ImagesContext) as IImageContext;
+  const { handleProfileCategoryPhotos, getProfileCategoryPhotos } =
+    useImageRecommendation();
+
   const [tabs, setTabs] = useState([true, false, false]);
-  const initPhotos = [
+
+  /* TODO:  1)Separate photos from components
+  //        2)Create getInitialPhotos method
+  //        3)Set initial photos inside components on useEffect
+  //        4)Remove initPhotos parameter from handleProfileCategoryPhotos
+            5)Think about refactor more, about SingleResponsibility instances, like filters and more...*/
+  const initPhotos: IImage[] = [
     {
       id: 1,
       url: "https://i.pinimg.com/564x/10/3e/65/103e6576cb9b83f54cc9a25bf398b6a8.jpg",
@@ -87,25 +94,14 @@ function Profile() {
     },
   ];
 
-  const [photosByCategories, setCategoriesPhotos] =
-    useState<IInitCategoriesPhotos>({});
-
   const handleTab = (tabIndex: number) => {
     setTabs((prevTabList) =>
-      prevTabList.map((tab, i) => (i === tabIndex ? true : false))
+      prevTabList.map((_, i) => (i === tabIndex ? true : false))
     );
   };
 
   useEffect(() => {
-    const initCategoriesPhotos: IInitCategoriesPhotos = {};
-
-    for (const tag of Object.entries(recommendedTags)) {
-      initCategoriesPhotos[tag[0]] = initPhotos.filter((photo) =>
-        photo.tags.includes(tag[0])
-      );
-    }
-
-    setCategoriesPhotos(initCategoriesPhotos);
+    handleProfileCategoryPhotos(initPhotos);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -127,7 +123,7 @@ function Profile() {
               Recommended categories
             </h1>
             <ul className="flex overflow-hidden border-2 border-b-0 border-x-0">
-              {Object.entries(photosByCategories).map((image, i) => (
+              {Object.entries(getProfileCategoryPhotos()).map((image, i) => (
                 <CategoryTab
                   key={i}
                   item={image}
@@ -137,7 +133,7 @@ function Profile() {
                 />
               ))}
             </ul>
-            {Object.entries(photosByCategories).map((image, i) =>
+            {Object.entries(getProfileCategoryPhotos()).map((image, i) =>
               tabs[i] ? <CategoryContent key={i} item={image} /> : null
             )}
           </div>
