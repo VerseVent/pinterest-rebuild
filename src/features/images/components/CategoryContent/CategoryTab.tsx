@@ -1,9 +1,13 @@
-import React from "react";
+import { IImage } from "../../interfaces/IImage";
 
-function CategoryContent({ item }) {
+type Props = {
+  item: [string, IImage[]];
+};
+
+function CategoryContent({ item }: Props) {
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
-      {item[1].map((photo, i) => (
+      {item[1].map((photo: IImage, i: number) => (
         <div className="col-span-3" key={i}>
           <img
             className="rounded-xl h-full object-cover"

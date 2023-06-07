@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "@/components/Header/Header";
 import CategoryContent from "@/features/images/components/CategoryContent/CategoryTab";
 import CategoryTab from "@/features/images/components/CategoryTab/CategoryTab";
 import { ImagesContext } from "@/features/images/states/ImagesProvider";
+import { IImageContext } from "@/features/images/interfaces/IImageContext";
+import { IInitCategoriesPhotos } from "@/features/images/interfaces/IInitCategoriesPhotos";
 
 function Profile() {
-  const { recommendedTags } = useContext(ImagesContext);
+  const { recommendedTags } = useContext(ImagesContext) as IImageContext;
   const [tabs, setTabs] = useState([true, false, false]);
   const initPhotos = [
     {
@@ -85,21 +87,24 @@ function Profile() {
     },
   ];
 
-  const [photosByCategories, setCategoriesPhotos] = useState({});
+  const [photosByCategories, setCategoriesPhotos] =
+    useState<IInitCategoriesPhotos>({});
 
-  const handleTab = (tabIndex:number) => {
+  const handleTab = (tabIndex: number) => {
     setTabs((prevTabList) =>
       prevTabList.map((tab, i) => (i === tabIndex ? true : false))
     );
   };
 
   useEffect(() => {
-    const initCategoriesPhotos = {};
+    const initCategoriesPhotos: IInitCategoriesPhotos = {};
+
     for (const tag of Object.entries(recommendedTags)) {
       initCategoriesPhotos[tag[0]] = initPhotos.filter((photo) =>
         photo.tags.includes(tag[0])
       );
     }
+
     setCategoriesPhotos(initCategoriesPhotos);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

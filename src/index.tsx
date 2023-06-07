@@ -4,7 +4,7 @@ import Main from "./pages/Main";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./pages/Profile";
-import { AppProvider } from "./context/AppContext";
+import { ImagesProvider } from "./features/images/states/ImagesProvider";
 
 const router = createBrowserRouter([
   {
@@ -17,10 +17,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root") as Element).render(
   <React.StrictMode>
-    <AppProvider>
+    <ImagesProvider>
       <RouterProvider router={router} />
-    </AppProvider>
+    </ImagesProvider>
   </React.StrictMode>
 );

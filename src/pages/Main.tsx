@@ -1,12 +1,17 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Search from "@/components/Search/Search";
-import "../App.css";
 import Header from "@/components/Header/Header";
 import Modal from "@/components/Modal/Modal";
 import { ImagesContext } from "@/features/images/states/ImagesProvider";
+import { IImage } from "@/features/images/interfaces/IImage";
+import { IImageContext } from "@/features/images/interfaces/IImageContext";
+import {
+  IMaxTags,
+  ITagsAmount,
+} from "@/features/images/interfaces/ITagsAmount";
 
 function Main() {
-  const [initPhotos] = useState([
+  const [initPhotos] = useState<IImage[]>([
     {
       id: 1,
       url: "https://i.pinimg.com/564x/10/3e/65/103e6576cb9b83f54cc9a25bf398b6a8.jpg",
@@ -84,7 +89,7 @@ function Main() {
     },
   ]);
   const renders = useRef(0);
-  const [photos, setPhotos] = useState([
+  const [photos, setPhotos] = useState<IImage[]>([
     {
       id: 1,
       url: "https://w.forfun.com/fetch/70/703e3aefd9500eff0f63294bc383ac2a.jpeg",
@@ -162,14 +167,18 @@ function Main() {
     },
   ]);
 
-  const { setRecommendedTags } = useContext(ImagesContext);
+  const { setRecommendedTags } = useContext(ImagesContext) as IImageContext;
   useEffect(() => {
     renders.current += 1;
   });
 
-  const [currentPhoto, setCurrentPhoto] = useState({});
+  const [currentPhoto, setCurrentPhoto] = useState<IImage>({
+    id: 0,
+    url: "",
+    tags: [],
+  });
 
-  const [viewedTags, setViewedTags] = useState([]);
+  const [viewedTags, setViewedTags] = useState<string[]>([]);
 
   useEffect(() => {
     handleRecs();
@@ -178,7 +187,7 @@ function Main() {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleSubmit = (userSearchData) => {
+  const handleSubmit = (userSearchData: string) => {
     const filteredPhotos = initPhotos.filter((photo) =>
       photo.tags.some((tag) => tag.includes(userSearchData))
     );
@@ -186,10 +195,6 @@ function Main() {
     setPhotos(filteredPhotos);
   };
 
-  // const handleRecomendation = () => {
-
-  //   return maxTags;
-  // };
   const toggleModal = () => {
     setModalOpen((prev) => !prev);
 
@@ -197,9 +202,10 @@ function Main() {
   };
 
   function handleRecs() {
-    const tagsAmount = {};
-    const maxTags = {};
-    viewedTags.forEach((tag) => {
+    const tagsAmount: ITagsAmount = {};
+    const maxTags: IMaxTags = {};
+
+    viewedTags.forEach((tag: string) => {
       if (tagsAmount[tag]) {
         tagsAmount[tag] += 1;
         return;
@@ -212,6 +218,7 @@ function Main() {
         maxTags[tagArrValues[0]] = tagArrValues[1];
         return;
       }
+
       Object.entries(maxTags).forEach((maxTagArrValues) => {
         if (maxTagArrValues[1] < tagArrValues[1]) {
           delete maxTags[maxTagArrValues[0]];
@@ -222,7 +229,7 @@ function Main() {
     setRecommendedTags(maxTags);
   }
 
-  function handleImageClick(photo) {
+  function handleImageClick(photo: IImage) {
     setViewedTags((prevTags) => [...prevTags, ...photo.tags]);
     setCurrentPhoto(photo);
     toggleModal();

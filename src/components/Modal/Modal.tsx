@@ -1,12 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import styles from "./Modal.module.scss";
 import { BiCommentDetail } from "react-icons/bi";
+import { IImage } from "@/features/images/interfaces/IImage";
 
-function Modal({ photo, isOpen, modalOpen }) {
+type Props = {
+  photo: IImage;
+  isOpen: boolean;
+  modalOpen: Function;
+};
+
+function Modal({ photo, isOpen, modalOpen }: Props) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<string[]>([]);
+
   const escFunction = useCallback(
-    (event) => {
+    (event: KeyboardEvent) => {
       if (event.key === "Escape" && isOpen) {
         modalOpen();
       }
@@ -23,7 +31,7 @@ function Modal({ photo, isOpen, modalOpen }) {
     };
   }, [escFunction]);
 
-  function sendMessage(e) {
+  function sendMessage(e: FormEvent) {
     e.preventDefault();
     setMessages((prevMessages) => [...prevMessages, message]);
     setMessage("");

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-export default function Search({ submitForm }) {
+type Props = { submitForm: Function };
+
+export default function Search({ submitForm }: Props) {
   const [userSearch, setUserSearch] = useState("");
 
   useEffect(() => {
@@ -8,7 +10,7 @@ export default function Search({ submitForm }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSearch]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const value = e.currentTarget.value;
     setUserSearch(value);
   };
