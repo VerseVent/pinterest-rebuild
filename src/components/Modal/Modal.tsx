@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import styles from "./Modal.module.scss";
 import { BiCommentDetail } from "react-icons/bi";
-import { IImage } from "@/features/images/interfaces/IImage";
+import { IImage } from "../../features/images/interfaces/IImage";
 
 type Props = {
   photo: IImage;
@@ -39,11 +39,11 @@ function Modal({ photo, isOpen, modalOpen }: Props) {
   return isOpen ? (
     <>
       <div
-        className="top-0 left-0 w-[100%] h-[100%] fixed bg-black bg-opacity-75"
+        className="top-0 left-0 w-[100%] h-[100%] fixed bg-black bg-opacity-75 z-10"
         onClick={() => modalOpen()}
       ></div>
       <div
-        className={`fixed top-[50%] left-[50%] translate-y-[-50%] grid grid-cols-12 ${styles.slideUpAnimation}`}
+        className={`fixed top-[50%] z-20 left-[50%] translate-y-[-50%] grid grid-cols-12 ${styles.slideUpAnimation}`}
       >
         <div className="absolute right-[-20px] top-[-20px]">
           <i onClick={() => modalOpen()} className="text-white bi bi-x-lg"></i>

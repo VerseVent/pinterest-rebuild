@@ -5,6 +5,8 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./pages/Profile";
 import { ImagesProvider } from "./features/images/states/ImagesProvider";
+import Login from "./pages/Login";
+import { UserProvider } from "./features/users/states/UserProvider";
 
 const router = createBrowserRouter([
   {
@@ -15,12 +17,18 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as Element).render(
   <React.StrictMode>
-    <ImagesProvider>
-      <RouterProvider router={router} />
-    </ImagesProvider>
+    <UserProvider>
+      <ImagesProvider>
+        <RouterProvider router={router} />
+      </ImagesProvider>
+    </UserProvider>
   </React.StrictMode>
 );

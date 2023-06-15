@@ -1,98 +1,14 @@
 import { useEffect, useState } from "react";
-import Header from "@/components/Header/Header";
-import CategoryContent from "@/features/images/components/CategoryContent/CategoryTab";
-import CategoryTab from "@/features/images/components/CategoryTab/CategoryTab";
-import { useImageRecommendation } from "@/features/images/services/useImageRecommendation";
-import { IImage } from "@/features/images/interfaces/IImage";
+import Header from "../components/Header/Header";
+import CategoryContent from "../features/images/components/CategoryContent/CategoryTab";
+import CategoryTab from "../features/images/components/CategoryTab/CategoryTab";
+import { ProfileImagesService } from "../features/images/services/profile-images.service";
 
 function Profile() {
   const { handleProfileCategoryPhotos, getProfileCategoryPhotos } =
-    useImageRecommendation();
+    ProfileImagesService();
 
   const [tabs, setTabs] = useState([true, false, false]);
-
-  /* TODO:  1)Separate photos from components
-  //        2)Create getInitialPhotos method
-  //        3)Set initial photos inside components on useEffect
-  //        4)Remove initPhotos parameter from handleProfileCategoryPhotos
-            5)Think about refactor more, about SingleResponsibility instances, like filters and more...*/
-  const initPhotos: IImage[] = [
-    {
-      id: 1,
-      url: "https://i.pinimg.com/564x/10/3e/65/103e6576cb9b83f54cc9a25bf398b6a8.jpg",
-      tags: ["nature", "landscape", "female"],
-    },
-    {
-      id: 2,
-      url: "https://i.pinimg.com/564x/8a/21/da/8a21da68eb11a5f9352f8ec7ad1afd85.jpg",
-      tags: ["city", "architecture", "female"],
-    },
-    {
-      id: 3,
-      url: "https://i.pinimg.com/564x/1d/17/21/1d17218d92afa9418b7dea603dedf296.jpg",
-      tags: ["animals", "wildlife", "male"],
-    },
-    {
-      id: 4,
-      url: "https://i.pinimg.com/564x/24/d6/c8/24d6c823c17582f8eab4810f187fafac.jpg",
-      tags: ["nature", "landscape", "ziben"],
-    },
-    {
-      id: 5,
-      url: "https://i.pinimg.com/564x/8c/dd/52/8cdd52096d66cf0cfc5bbf358e5389c0.jpg",
-      tags: ["city", "architecture", "test"],
-    },
-    {
-      id: 6,
-      url: "https://i.pinimg.com/564x/46/20/50/46205034b5bf8327f79c9c329c67d5fe.jpg",
-      tags: ["animals", "wildlife", "ziben"],
-    },
-    {
-      id: 7,
-      url: "https://i.pinimg.com/564x/f3/cf/c9/f3cfc98a0dcb3693b3a0296f1d6b99a5.jpg",
-      tags: ["nature", "landscape", "savage"],
-    },
-    {
-      id: 8,
-      url: "https://i.pinimg.com/564x/74/38/60/7438600966f2fb49dc3ac45c6698ac55.jpg",
-      tags: ["city", "architecture", "ziben"],
-    },
-    {
-      id: 9,
-      url: "https://i.pinimg.com/564x/75/9f/fa/759ffa6be4e320e4ad2047f4ed5628cd.jpg",
-      tags: ["animals", "wildlife", "savage"],
-    },
-    {
-      id: 10,
-      url: "https://i.pinimg.com/564x/3d/03/be/3d03be4c0d16218f903b9147acbfe9b7.jpg",
-      tags: ["nature", "landscape", "ziben"],
-    },
-    {
-      id: 11,
-      url: "https://i.pinimg.com/564x/17/64/51/1764512acc7ace0a19775747ff6e18d2.jpg",
-      tags: ["city", "architecture", "savage"],
-    },
-    {
-      id: 12,
-      url: "https://i.pinimg.com/564x/2b/76/e2/2b76e2d02a7d1277c5d9f75395fe8217.jpg",
-      tags: ["animals", "wildlife", "test"],
-    },
-    {
-      id: 13,
-      url: "https://i.pinimg.com/564x/3d/0c/2d/3d0c2dc464e8a62e07cb5b02fb048383.jpg",
-      tags: ["nature", "landscape", "test"],
-    },
-    {
-      id: 14,
-      url: "https://i.pinimg.com/564x/b3/5c/2c/b35c2c7d5f2dfca01a151e22f517f289.jpg",
-      tags: ["city", "architecture", "savage"],
-    },
-    {
-      id: 15,
-      url: "https://i.pinimg.com/564x/d2/95/91/d2959175648a1baf3208369cfe167302.jpg",
-      tags: ["wolfs", "wildlife", "test"],
-    },
-  ];
 
   const handleTab = (tabIndex: number) => {
     setTabs((prevTabList) =>
@@ -101,7 +17,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    handleProfileCategoryPhotos(initPhotos);
+    handleProfileCategoryPhotos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

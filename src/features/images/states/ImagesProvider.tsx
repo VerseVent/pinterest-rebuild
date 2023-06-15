@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
+import { IImage } from "../interfaces/IImage";
 import { IImageContext } from "../interfaces/IImageContext";
 import { IInitCategoriesPhotos } from "../interfaces/IInitCategoriesPhotos";
 import { IMaxTags } from "../interfaces/ITagsAmount";
@@ -14,7 +15,7 @@ export const ImagesContext = createContext<IImageContext | null>(null);
 // Create the provider component
 export const ImagesProvider = ({ children }: Props) => {
   const [recommendedTags, setRecommendedTags] = useState<IMaxTags>({});
-
+  const [images, setImages] = useState<IImage[]>([]);
   const [profileCategoryPhotos, setProfileCategoryPhotos] =
     useState<IInitCategoriesPhotos>({});
 
@@ -22,6 +23,8 @@ export const ImagesProvider = ({ children }: Props) => {
     <ImagesContext.Provider
       value={{
         recommendedTags,
+        images,
+        setImages,
         setRecommendedTags,
         profileCategoryPhotos,
         setProfileCategoryPhotos,
